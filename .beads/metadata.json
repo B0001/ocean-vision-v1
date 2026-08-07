@@ -1,0 +1,7 @@
+{
+  "database": "dolt",
+  "backend": "dolt",
+  "dolt_mode": "embedded",
+  "dolt_database": "ocean_vision_v1",
+  "project_id": "0f062157-0bf8-4fe6-8778-c3952331d48b"
+}
