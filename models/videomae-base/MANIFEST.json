@@ -1,0 +1,13 @@
+{
+  "files_sha256": {
+    "config.json": "5fbedfea3706bd9fe6c0dc706beeb501ae72e4954703e03bebe3406f046f8212",
+    "model.safetensors": "bc053ca2840a038b1068269a4eec06ca569689e9a1ed9376a5b2b8a111be5290",
+    "preprocessor_config.json": "c3aa722f22a7ff0d234d407862025fe47672f74f46f92c91f757f7a7354107c2"
+  },
+  "license": "cc-by-nc-4.0",
+  "license_note": "CC-BY-NC-4.0 is non-commercial. Recorded as required by this bead's acceptance criteria; whether a non-commercial license is acceptable for this deployment is a legal/product decision this script and its caller do not make.",
+  "license_url": "https://creativecommons.org/licenses/by-nc/4.0/",
+  "repo_id": "MCG-NJU/videomae-base",
+  "revision": "dc740ceda42fce44faed2ea03c6d447db72f6af9",
+  "source_url": "https://huggingface.co/MCG-NJU/videomae-base/tree/dc740ceda42fce44faed2ea03c6d447db72f6af9"
+}

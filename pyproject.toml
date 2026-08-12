@@ -1,0 +1,31 @@
+[project]
+name = "ocean-vision"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+    "huggingface-hub>=1.27.0",
+    "numpy>=2.5.2",
+    "opencv-python-headless>=5.0.0.93",
+    "torch>=2.13.0",
+    "transformers>=5.15.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/ov1"]
+
+# CPU-only torch wheel: this container has no GPU, and the Jetson AGX Orin
+# target (spec 5.1) runs NVIDIA's own JetPack-built torch, not the desktop
+# CUDA wheel PyPI serves by default. Pulling the default wheel here drags in
+# ~1.5GB of x86/server nvidia-* CUDA packages that apply to neither
+# environment.
+[tool.uv.sources]
+torch = { index = "pytorch-cpu" }
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
