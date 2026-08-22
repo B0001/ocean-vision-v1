@@ -7,7 +7,9 @@ from .dataset import (
     ClipFrameSourceError,
     InMemoryClipFrameSource,
     NpzClipFrameSource,
+    WindowBatch,
     WindowSample,
+    collate_window_samples,
     save_clip_npz,
 )
 from .manifest import (
@@ -26,7 +28,9 @@ __all__ = [
     "ClipFrameSourceError",
     "InMemoryClipFrameSource",
     "NpzClipFrameSource",
+    "WindowBatch",
     "WindowSample",
+    "collate_window_samples",
     "save_clip_npz",
     "REQUIRED_BASELINE_LABEL",
     "VALID_SPLITS",

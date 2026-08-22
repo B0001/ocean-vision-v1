@@ -168,6 +168,38 @@ class WindowSample:
     start_frame: int
 
 
+@dataclass(frozen=True)
+class WindowBatch:
+    """A collated batch of `WindowSample`s: a stacked `(B, C, T, H, W)`
+    tensor plus per-item provenance, kept as parallel lists rather than
+    folded into the tensor so a bad reconstruction during training can still
+    be traced to a `(clip_id, start_frame)` after batching."""
+
+    tensor: torch.Tensor
+    clip_ids: list[str]
+    start_frames: list[int]
+
+
+def collate_window_samples(samples: Sequence[WindowSample]) -> WindowBatch:
+    """`collate_fn` for `DataLoader(BaselineWindowDataset(...), ...)`.
+
+    `WindowSample` is a plain dataclass, not a `Tensor`/`Mapping`/`Sequence`/
+    `NamedTuple`, so `torch.utils.data.dataloader.default_collate` raises
+    `TypeError` on it -- this is the explicit collate function this dataset
+    requires; a `DataLoader` built without it will fail on its first batch.
+    Raises `ValueError` on an empty batch rather than returning a
+    zero-length tensor a downstream training loop would have to guard
+    against.
+    """
+    if not samples:
+        raise ValueError("cannot collate an empty batch of window samples")
+    return WindowBatch(
+        tensor=torch.stack([sample.tensor for sample in samples], dim=0),
+        clip_ids=[sample.clip_id for sample in samples],
+        start_frames=[sample.start_frame for sample in samples],
+    )
+
+
 class BaselineWindowDataset(Dataset):
     """A `torch.utils.data.Dataset` over sliding-window baseline clips,
     assembled to the spec 4.2 `(C, T, H, W)` shape.
@@ -228,6 +260,14 @@ class BaselineWindowDataset(Dataset):
             while start + window_frames <= length:
                 self._index.append((clip_index, start))
                 start += stride
+
+    @property
+    def output_shape(self) -> tuple[int, int, int, int]:
+        """The `(C, T, H, W)` shape every yielded `WindowSample.tensor`
+        has -- the assembler's `(B, C, T, H, W)` `output_shape` with the
+        batch dimension dropped, since a `Dataset.__getitem__` yields one
+        unbatched window."""
+        return self._assembler.output_shape[1:]
 
     def __len__(self) -> int:
         return len(self._index)
