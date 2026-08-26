@@ -29,3 +29,19 @@ torch = { index = "pytorch-cpu" }
 name = "pytorch-cpu"
 url = "https://download.pytorch.org/whl/cpu"
 explicit = true
+
+# The worker loop lives in the verified-sandbox package (`uv tool install
+# --editable`), not in this repo and not in its dependency graph. Only what
+# genuinely differs per repo is here; see that package's README for every key.
+[tool.sandbox]
+# The model cache is worth persisting across workers for the same reason the uv
+# cache is: without it every session re-downloads and throws the result away.
+volumes = ["claude-hf-cache:/home/node/.cache/huggingface"]
+
+[tool.sandbox.forward-env]
+# A secret, so it is emitted as a bare `-e HF_TOKEN` and its value never
+# reaches docker's argv, where any user on the host could read it from `ps`.
+HF_TOKEN = "gated Hugging Face repos will 401 and look like a missing model"
+
+[tool.sandbox.env]
+HF_HOME = "/home/node/.cache/huggingface"

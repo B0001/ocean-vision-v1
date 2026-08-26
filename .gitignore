@@ -29,8 +29,9 @@ wheels/
 .\#*
 *~
 
-# Sandbox run output (see sandbox.sh)
-sandbox-handoffs/
+# Sandbox run output. sandbox-handoffs/ is deliberately NOT ignored: the
+# handoff is the only durable account of how a bead was actually done, and the
+# container that wrote it is disposable.
 .sandbox.lock/
 
 # model
