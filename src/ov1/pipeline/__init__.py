@@ -1,6 +1,10 @@
 """End-to-end orchestration: wiring the ingress ring buffer's window of
 synchronized frame pairs through Lab/DoLP preprocessing into inference
-tensor assembly (spec 4.1, 4.2; bead ocean-vision-v1-0h8)."""
+tensor assembly (spec 4.1, 4.2; bead ocean-vision-v1-0h8), and the
+deterministic alerting engine those heads feed (spec 3, 5.2; bead
+ocean-vision-v1-1ou)."""
+
+from .alerting import Alert, AlertEngine, AlertSink, NodePosition
 
 from .window_assembly import (
     NIR_PLANE_ORDER,
@@ -12,6 +16,10 @@ from .window_assembly import (
 )
 
 __all__ = [
+    "Alert",
+    "AlertEngine",
+    "AlertSink",
+    "NodePosition",
     "SiteCalibrationConfig",
     "SiteConfigError",
     "FrameChannelsPipeline",
