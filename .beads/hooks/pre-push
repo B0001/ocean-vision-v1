@@ -1,13 +1,10 @@
 #!/usr/bin/env sh
 
-# --- sandbox guard (NOT managed by beads; keep outside the markers below) ---
-# Workers run with BEADS_ACTOR=sandbox and are told not to commit. Commits from
-# the host are unaffected: BEADS_ACTOR is only set inside the container.
+# --- sandbox guard v2 (NOT managed by beads; keep outside the markers below) ---
 # Managed by `sandbox install-hooks`; re-run it after `bd` regenerates hooks.
 if [ "${BEADS_ACTOR:-}" = "sandbox" ]; then
-  echo >&2 "pre-push: refusing -- BEADS_ACTOR=sandbox."
-  echo >&2 "Leave the tree dirty and put the exact git commands in your handoff."
-  echo >&2 "A human reviews and commits. This is not a bug in your bead."
+  echo >&2 "pre-push: refusing -- BEADS_ACTOR=sandbox never pushes. Commit on"
+  echo >&2 "your sandbox/<bead-id> branch; the host pushes and a human merges."
   exit 1
 fi
 # --- end sandbox guard ---
